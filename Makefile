@@ -9,6 +9,3 @@ create_db:
 	docker-compose down
 	docker-compose up -d
 
-	sleep 10
-
-	python create_tables.py
