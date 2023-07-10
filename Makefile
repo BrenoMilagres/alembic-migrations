@@ -9,3 +9,9 @@ create_db:
 	docker-compose down
 	docker-compose up -d
 
+	sleep 5
+
+	cd app
+
+	alembic check
+

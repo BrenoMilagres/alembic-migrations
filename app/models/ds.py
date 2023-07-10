@@ -9,6 +9,4 @@ class DsModel(settings.DBBaseModel):
     name = Column(String(256), nullable=False)
     seniority = Column(String(256), nullable=False)
     cloud = Column(String(256), nullable=False)
-    code_language = Column(String(8), nullable=False)
-    orchestrator = Column(Integer, nullable=False)
     
