@@ -12,46 +12,49 @@
 │    │   └── SQLAlchemy relational models
 │    │
 │    ├── utils/
-│    │   └── SQLAlchemy relational models 
+│    │   └── Database configuration and connection files
 │    │
-│    ├── routers/
-│    │   └── API routes (get-token/ and request-analysis/)
-│    │
-│    ├── schemas/        
-│    │   └── pydantic schemas (api inputs and responses)
-|    |
-|    ├── tests/
-|    |   └── unit test with pytest
-│    │
-│    ├── utils/ 
-│    │   └── Core code of the api with different functionalities
-│    │
-│    ├── create_tables.py (creation of tables in the transactional database)
-│    │
-│    ├── main.py (FastAPI and definitions)
-│    │
-│    └── requirements.txt (dependencies)
+│    ├── alembic.ini/
+│        └── Alembic ini file
+│    
+├── .gitignore 
 │ 
-├── azure-pipelines.yml (ci/cd)
+├── Makefile (commands to perform migrations and configure the database)
 │ 
-├── docker-compose.yml (transactional database upload locally)
+├── README.md  
 │ 
-├── Dockerfile (build to deploy the api on VM-Azure)
-│ 
+├── docker-compose.yml (Postgres DB)
+│
 ├── example.env (sample of required environment variables)
 │
-├── Makefile (commands to run the api locally)
-│
-└── README.md (instructions and information about the project)
+└── requirements.txt
 ```
 
 ## Clone and setup 
-the project is public so to clone it just run the following command:
+1. The project is public so to clone it just run the following command:
 ```
 git clone https://github.com/BrenoMilagres/alembic-migrations.git
 ```
 
+2. Create and activate a virtual environment with python 3.10:
+```
+virtualenv venv -p python3.10
+source venv/bin/activate
+```
 
+3. Installing dependencies:
+```
+pip install -r requirements.txt
+```
+
+4. Create .env file to export the necessary environment variables and their respective values ​​based on example.env
+```
+export DB_USER="alembic_tuto"
+export DB_PASS="alembic_tuto"
+export DB_NAME="alembic_tuto"
+export DB_HOST="localhost"
+export DB_PORT="5432"
+```
 
 ## The Migration Environment
 
@@ -80,10 +83,6 @@ yourproject/
 - alembic - this directory lives within your application’s source tree and is the home of the migration environment. It can be named anything, and a project that uses multiple databases may even have more than one.
 
 - env.py - This is a Python script that is run whenever the alembic migration tool is invoked. At the very least, it contains instructions to configure and generate a SQLAlchemy engine, procure a connection from that engine along with a transaction, and then invoke the migration engine, using the connection as a source of database connectivity.
-
-The env.py script is part of the generated environment so that the way migrations run is entirely customizable. The exact specifics of how to connect are here, as well as the specifics of how the migration environment are invoked. The script can be modified so that multiple engines can be operated upon, custom arguments can be passed into the migration environment, application-specific libraries and models can be loaded in and made available.
-
-Alembic includes a set of initialization templates which feature different varieties of env.py for different use cases.
 
 - README - included with the various environment templates, should have something informative.
 
