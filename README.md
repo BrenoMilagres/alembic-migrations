@@ -56,6 +56,11 @@ export DB_HOST="localhost"
 export DB_PORT="5432"
 ```
 
+5. Run the make migration command implemented in the Makefile file:
+```
+make migration
+```
+
 ## The Migration Environment
 
 Usage of Alembic starts with creation of the Migration Environment. This is a directory of scripts that is specific to a particular application. The migration environment is created just once, and is then maintained along with the application’s source code itself. The environment is created using the init command of Alembic:
