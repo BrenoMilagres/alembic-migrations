@@ -1,5 +1,58 @@
 # alembic-migrations
 
+## Project structure
+```
+.
+├── app/
+│    │
+│    ├── alembic/
+│    │   └── Alembic environment
+|    |
+|    ├── models/
+│    │   └── SQLAlchemy relational models
+│    │
+│    ├── utils/
+│    │   └── SQLAlchemy relational models 
+│    │
+│    ├── routers/
+│    │   └── API routes (get-token/ and request-analysis/)
+│    │
+│    ├── schemas/        
+│    │   └── pydantic schemas (api inputs and responses)
+|    |
+|    ├── tests/
+|    |   └── unit test with pytest
+│    │
+│    ├── utils/ 
+│    │   └── Core code of the api with different functionalities
+│    │
+│    ├── create_tables.py (creation of tables in the transactional database)
+│    │
+│    ├── main.py (FastAPI and definitions)
+│    │
+│    └── requirements.txt (dependencies)
+│ 
+├── azure-pipelines.yml (ci/cd)
+│ 
+├── docker-compose.yml (transactional database upload locally)
+│ 
+├── Dockerfile (build to deploy the api on VM-Azure)
+│ 
+├── example.env (sample of required environment variables)
+│
+├── Makefile (commands to run the api locally)
+│
+└── README.md (instructions and information about the project)
+```
+
+## Clone and setup 
+the project is public so to clone it just run the following command:
+```
+git clone https://github.com/BrenoMilagres/alembic-migrations.git
+```
+
+
+
 ## The Migration Environment
 
 Usage of Alembic starts with creation of the Migration Environment. This is a directory of scripts that is specific to a particular application. The migration environment is created just once, and is then maintained along with the application’s source code itself. The environment is created using the init command of Alembic:
