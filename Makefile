@@ -3,7 +3,7 @@ export SHELLOPTS:=$(if $(SHELLOPTS),$(SHELLOPTS):)pipefail:errexit
 
 .ONESHELL:
 
-create_db:
+migration:
 	source .env
 
 	docker-compose down
@@ -13,5 +13,5 @@ create_db:
 
 	cd app
 
-	alembic check
+	alembic check || (alembic revision --autogenerate; alembic upgrade +1)
 
