@@ -1,5 +1,45 @@
 # alembic-migrations
 
+## The Migration Environment
+
+Usage of Alembic starts with creation of the Migration Environment. This is a directory of scripts that is specific to a particular application. The migration environment is created just once, and is then maintained along with the application’s source code itself. The environment is created using the init command of Alembic:
+
+```
+alembic init <folder>
+```
+
+The structure of this environment, including some generated migration scripts, looks like:
+
+```
+yourproject/
+    alembic/
+        env.py
+        README
+        script.py.mako
+        versions/
+            3512b954651e_add_account.py
+            2b1ae634e5cd_add_order_id.py
+            3adcc9a56557_rename_username_field.py
+```
+
+- yourproject - this is the root of your application’s source code, or some directory within it.
+
+- alembic - this directory lives within your application’s source tree and is the home of the migration environment. It can be named anything, and a project that uses multiple databases may even have more than one.
+
+- env.py - This is a Python script that is run whenever the alembic migration tool is invoked. At the very least, it contains instructions to configure and generate a SQLAlchemy engine, procure a connection from that engine along with a transaction, and then invoke the migration engine, using the connection as a source of database connectivity.
+
+The env.py script is part of the generated environment so that the way migrations run is entirely customizable. The exact specifics of how to connect are here, as well as the specifics of how the migration environment are invoked. The script can be modified so that multiple engines can be operated upon, custom arguments can be passed into the migration environment, application-specific libraries and models can be loaded in and made available.
+
+Alembic includes a set of initialization templates which feature different varieties of env.py for different use cases.
+
+- README - included with the various environment templates, should have something informative.
+
+- script.py.mako - This is a Mako template file which is used to generate new migration scripts. Whatever is here is used to generate new files within versions/. This is scriptable so that the structure of each migration file can be controlled, including standard imports to be within each, as well as changes to the structure of the upgrade() and downgrade() functions. For example, the multidb environment allows for multiple functions to be generated using a naming scheme upgrade_engine1(), upgrade_engine2().
+
+- versions/ - This directory holds the individual version scripts. Users of other migration tools may notice that the files here don’t use ascending integers, and instead use a partial GUID approach. In Alembic, the ordering of version scripts is relative to directives within the scripts themselves, and it is theoretically possible to “splice” version files in between others, allowing migration sequences from different branches to be merged, albeit carefully by hand.
+
+## Autogenerate
+
 Alembic can view the status of the database and compare against the table metadata in the application, generating the “obvious” migrations based on a comparison. This is achieved using the --autogenerate option to the alembic revision command, which places so-called candidate migrations into our new migrations file. We review and modify these by hand as needed, then proceed normally.
 
 To use autogenerate, we first need to modify our env.py so that it gets access to a table metadata object that contains the target. Suppose our application has a declarative base (sqlAlchemy) in app.models This base contains a MetaData object which contains Table objects defining our database. We make sure this is loaded in env.py and then passed to EnvironmentContext.configure() via the target_metadata argument. The env.py sample script used in the generic template already has a variable declaration near the top for our convenience, where we replace None with our MetaData. Starting with:
@@ -12,14 +52,22 @@ target_metadata = None
 ```
 we change to:
 ```
-from myapp.mymodel import Base
-target_metadata = Base.metadata
+from utils.configs import settings
+target_metadata = settings.DBBaseModel.metadata
+```
+
+and the URL of the DB we reference as follows:
+```
+config = context.config
+config.set_main_option('sqlalchemy.url', settings.DB_URL)
 ```
 
 We can then use the alembic revision command in conjunction with the --autogenerate option. Suppose our MetaData contained a definition for the account table, and the database did not. We’d get output like:
 ```
-$ alembic revision --autogenerate -m "Added account table"
-INFO [alembic.context] Detected added table 'account'
+$ alembic revision --autogenerate -m "Added app tables"
+INFO [alembic.context] Detected added tables 'de', 'ds' and 'ae'
 Generating /path/to/foo/alembic/versions/27c6a30d7c24.py...done
 ```
 We can then view our file 27c6a30d7c24.py and see that a rudimentary migration is already present
+
+
