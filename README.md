@@ -56,7 +56,7 @@ export DB_HOST="localhost"
 export DB_PORT="5432"
 ```
 
-5. Run the make migration command implemented in the Makefile file:
+5. Run the make migration command implemented in the Makefile:
 ```
 make migration
 ```
