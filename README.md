@@ -1,11 +1,11 @@
 # alembic-migrations
 
 **required dependencies**
-> python 3.10
-> 
-> docker: https://docs.docker.com/engine/install/ubuntu/
-> 
-> virtualenv: https://www.cyberithub.com/how-to-install-virtualenv-on-ubuntu-20-04-lts-focal-fossa/
+- python 3.10
+
+- docker: https://docs.docker.com/engine/install/ubuntu/
+
+- virtualenv: https://www.cyberithub.com/how-to-install-virtualenv-on-ubuntu-20-04-lts-focal-fossa/
 
 ## Project structure
 ```
